@@ -11,6 +11,15 @@ module.exports = {
             { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
         ]
     },
+
+    buildModules: [
+        '@nuxtjs/dotenv',
+    ],
+
+    modules: [
+        '@nuxtjs/axios',
+    ],
+
     plugins: [
         { src: '~/plugins/helpers.js' },
     ],
