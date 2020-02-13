@@ -2,6 +2,7 @@ export default class Piece {
     row = null
     col = null
     player = null
+    index = null
 
     constructor(row, col) {
         this.row = row
@@ -25,7 +26,7 @@ export default class Piece {
     }
 
     kill() {
-
+        this.player.pieces.splice(this.index, 1)
     }
 
     moveTo(row, col) {

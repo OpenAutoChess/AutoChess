@@ -1,7 +1,8 @@
 export default class Mapping {
-    map = {}
+    map = null
 
     constructor() {
+        this.map = {}
 
     }
 
@@ -10,6 +11,7 @@ export default class Mapping {
             this.map[row] = {}
         }
         this.map[row][col] = piece
+        this.map = Object.assign({}, this.map)
     }
 
     isEmpty(row, col) {

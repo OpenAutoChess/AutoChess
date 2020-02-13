@@ -6,7 +6,7 @@ export default class Controller {
     players = []
     activeCell = null
     activePaths = []
-    nextMove = null
+    nextMove = 0
 
     constructor() {
         this.mapping = new Mapping()
@@ -28,7 +28,7 @@ export default class Controller {
 
     setActiveCell(row, col) {
         let piece = this.getPiece(row, col)
-        if (this.isActivePath(row, col)) {
+        if (this.isActivePath(row, col) && this.players[this.nextMove].current) {
             this.move(this.activeCell.row, this.activeCell.col, row, col)
         }
 
@@ -49,16 +49,18 @@ export default class Controller {
     }
 
     move(fromRow, fromCol, toRow, toCol) {
+        this.nextMove = (this.nextMove + 1)%this.players.length
         let piece = this.getPiece(fromRow, fromCol)
         let target = this.getPiece(toRow, toCol)
 
         if (target) {
             target.kill()
+            this.mapping.update(toRow, toCol, null)
         }
 
         piece.moveTo(toRow, toCol)
-        this.mapping.update(fromRow, fromCol, null)
         this.mapping.update(toRow, toCol, piece)
+        this.mapping.update(fromRow, fromCol, null)
     }
 
 }

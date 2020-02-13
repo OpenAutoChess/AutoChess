@@ -8,11 +8,11 @@ export default class Classical extends Controller {
     constructor() {
         super()
 
-        this.addPlayer(new Player('b', false))
         this.addPlayer(new Player('w', true))
+        this.addPlayer(new Player('b', false))
 
         this.players.forEach((player, index) => {
-            let row = index == 0 ? 1 : 8
+            let row = index == 0 ? 8 : 1
 
             this.addPiece(player, new Pieces.Rook(row, 1))
             this.addPiece(player, new Pieces.Rook(row, 8))
@@ -26,7 +26,7 @@ export default class Classical extends Controller {
             this.addPiece(player, new Pieces.King(row, 4))
             this.addPiece(player, new Pieces.Queen(row, 5))
 
-            row = index == 0 ? 2 : 7
+            row = index == 0 ? 7 : 2
             for(let i=1;i<=8;++i) {
                 this.addPiece(player, new Pieces.Pawn(row, i))
             }

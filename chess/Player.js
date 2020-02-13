@@ -10,6 +10,7 @@ export default class Player {
 
     addPiece(piece) {
         piece.player = this
+        piece.index = this.pieces.length
         this.pieces.push(piece)
     }
 
