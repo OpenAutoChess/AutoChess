@@ -1,0 +1,11 @@
+:root {
+  --font-size-base: 16px;
+  --font-base: 'Muller', sans-serif;
+  --color-base: #77D400;
+  --color-line: #43A019;
+}
+@media screen and (max-width: 414px) {
+    :root {
+        --font-size-base: 16px;
+    }
+}

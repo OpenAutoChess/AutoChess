@@ -1,0 +1,15 @@
+@import 'classical';
+@import 'fourplayer';
+
+.board {
+    border: 2px solid black;
+    margin: auto;
+    border-collapse: collapse;
+
+    &.-classical {
+        @include classical-board;
+    }
+    &.-fourplayer {
+        @include fourplayer-board;
+    }
+}

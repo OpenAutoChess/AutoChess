@@ -1,4 +1,5 @@
 module.exports = {
+    mode: 'universal',
 
     head: {
         title: 'AutoChess',
@@ -12,6 +13,12 @@ module.exports = {
         ]
     },
 
+    loading: { color: 'red' },
+
+    css: [
+        '~/assets/main.scss'
+    ],
+
     buildModules: [
         '@nuxtjs/dotenv',
     ],
@@ -23,9 +30,6 @@ module.exports = {
     plugins: [
         { src: '~/plugins/helpers.js' },
     ],
-
-
-    loading: { color: 'red' },
 
     build: {
         extend (config, { isDev, isClient }) {
