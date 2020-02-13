@@ -1,6 +1,6 @@
 <template>
 <table class="board -classical">
-    <tbody>
+    <tbody v-if="controller">
         <tr v-for="i in 8" :key="i">
             <Cell
                 v-for="j in 8" :key="j"

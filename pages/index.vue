@@ -1,6 +1,8 @@
 <template>
     <section class="container">
-        <board></board>
+        <client-only>
+            <board></board>
+        </client-only>
     </section>
 </template>
 

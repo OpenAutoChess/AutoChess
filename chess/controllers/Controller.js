@@ -1,4 +1,5 @@
 import Mapping from '../Mapping'
+import io from 'socket.io-client'
 
 export default class Controller {
 
@@ -7,10 +8,15 @@ export default class Controller {
     activeCell = null
     activePaths = []
     nextMove = 0
+    connection = null
 
-    constructor() {
+    constructor(connection) {
         this.mapping = new Mapping()
+        this.connection = io('http://localhost:8000/')
 
+        this.connection.on('move', (res) => {
+            console.log(res)
+        })
     }
 
     addPlayer(player) {
@@ -30,6 +36,8 @@ export default class Controller {
         let piece = this.getPiece(row, col)
         if (this.isActivePath(row, col) && this.players[this.nextMove].current) {
             this.move(this.activeCell.row, this.activeCell.col, row, col)
+            this.connection.emit('move', JSON.stringify({row: row, col: col}))
+            console.log('done')
         }
 
         this.activeCell = (piece && piece.player.current) ? {
