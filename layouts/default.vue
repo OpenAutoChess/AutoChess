@@ -1,11 +1,17 @@
 <template>
-  <div>
-    <nuxt/>
-  </div>
+    <div class="wrapper">
+        <transition name="preloader-fade">
+            <preloader class="preloader-wrapper" v-if="$isLoading()" />
+        </transition>
+        <nuxt />
+    </div>
 </template>
-
 <script>
-export default {
+import Preloader from "@/components/partials/preloader.vue"
 
+export default {
+    components: {
+        Preloader
+    },
 }
 </script>

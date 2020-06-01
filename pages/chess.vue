@@ -1,13 +1,14 @@
 <template>
     <section class="container">
+        <client-only>
 
+        </client-only>
     </section>
 </template>
 
 <script>
-import board from '@/components/chess/boards/classical'
 
 export default {
-    components: { board }
+
 }
 </script>
