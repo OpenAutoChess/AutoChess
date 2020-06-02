@@ -96,3 +96,16 @@ select {
     appearance: none;
     background: #fff !important;
 }
+
+.container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1140px;
+}
+
+@media screen and (max-width: 1024px) {
+    .container {
+        padding: 0 10px 0 10px;
+    }
+}

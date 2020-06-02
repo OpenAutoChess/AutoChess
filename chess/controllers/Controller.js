@@ -8,7 +8,7 @@ export default class Controller {
         this.connection = io('http://localhost:8000/')
 
         this.connection.on('move', (res) => {
-            console.log(res)
+            //
         })
     }
 

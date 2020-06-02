@@ -1,21 +1,5 @@
 export default function({ app, store, req }, inject) {
 
-    // FLAGS
-    inject('check', (key) => store.getters['flags/CHECK'](key))
-
-    inject('toggle', (key) => {
-        store.commit('flags/TOGGLE', key, {root: true})
-    })
-
-    inject('setFalse', (key) => {
-        store.commit('flags/SET', {[key]: false}, {root: true})
-    })
-
-    inject('setTrue', (key) => {
-        store.commit('flags/SET', {[key]: true}, {root: true})
-    })
-
-
     // PRELOADER
     inject('isLoading', () => store.getters['preloader/IS_LOADING'])
 
@@ -26,6 +10,21 @@ export default function({ app, store, req }, inject) {
 
     inject('stopLoading', () => {
         store.commit('preloader/SET_LOADING', false, { root: true })
+    })
+
+    // Modals
+    inject('isOpen', (modal) => store.getters['modal/IS_OPEN'](modal))
+
+    inject('showModal', (modal, options = {}) => {
+        store.commit('modal/SET_MODAL_DATA', { modal: modal, data: {...options} })
+        store.commit('modal/SHOW_MODAL', modal)
+    })
+
+    inject('closeModal', (modal, clear = true) => {
+        store.commit('modal/CLOSE_MODAL', modal)
+        if (clear) {
+            store.commit('modal/SET_MODAL_DATA', { modal: modal, data: {} })
+        }
     })
 
 }
