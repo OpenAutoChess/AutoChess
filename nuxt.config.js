@@ -16,9 +16,9 @@ module.exports = {
     loading: { color: 'black' },
 
     css: [
-        '~/assets/basic.scss',
-        '~/assets/preloaders.scss',
-        '~/assets/main.scss'
+        { src: '~/assets/basic.scss', lang: 'scss' },
+        { src: '~/assets/preloaders.scss', lang: 'scss' },
+        { src: '~/assets/main.scss', lang: 'scss' },
     ],
 
     modules: [
@@ -30,5 +30,9 @@ module.exports = {
     ],
 
     build: {
+        extractCSS: false,
+        cache: false,
+        analyze: false,
+        // vendor: ['axios'],
     }
 }

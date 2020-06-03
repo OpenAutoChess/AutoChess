@@ -4,12 +4,8 @@ export default class Controller {
 
     connection = null
 
-    constructor(connection) {
-        this.connection = io('http://localhost:8000/')
+    constructor() {
 
-        this.connection.on('move', (res) => {
-            //
-        })
     }
 
 }
