@@ -18,7 +18,7 @@ export default {
         if (process.client) {
             setTimeout(() => {
                 this.$stopLoading()
-            }, 3000)
+            }, 1000 + Math.random() * 2000)
         }
     }
 }

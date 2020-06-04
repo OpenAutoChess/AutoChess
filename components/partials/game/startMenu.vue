@@ -2,14 +2,22 @@
     <div v-click-outside="closeMenu" :class="['start-wrapper', {'--active': isOpen}]">
         <div class="types-wrapper">
             <div :class="['type', {'--active': game.type == type.key}]" v-for="type in types" :key="type.key">
-                <button @click="chooseType(type.key)"><span>{{ type.name }}</span></button>
+                <button @click="chooseType(type)"><span>{{ type.name }}</span></button>
                 <div class="options" v-if="type.options">
                     <div v-for="option in type.options">
-                        {{ option.name }}
+                        <label>
+                            <input type="checkbox" :name="type.key" :value="option.key" v-model="game.options" :disabled="type.disabled" />
+                            {{ option.name }}
+                        </label>
                     </div>
                 </div>
             </div>
         </div>
+
+        <button class="close" @click="closeMenu">
+            <span></span>
+        </button>
+
         <div class="buttons-wrapper">
             <button @click="findMatch">
                 <svg width="300px" height="60px" viewBox="0 0 300 60" class="border">
@@ -25,6 +33,7 @@
 
 <script>
 import ClickOutside from 'vue-click-outside'
+import SearchController from '@/chess/controllers/SearchController'
 
 export default {
     directives: {
@@ -32,10 +41,11 @@ export default {
     },
     data() {
         return {
+            controller: null,
             isOpen: false,
             game: {
-                type: 'unranked',
-                options: [],
+                type: 'classical',
+                options: ['ranked', 'unranked'],
             },
             types: [
                 {
@@ -86,7 +96,7 @@ export default {
                 },
                 {
                     key: 'computer',
-                    name: 'play agains computer',
+                    name: 'play against computer',
                     options: [
                         {
                             key: 1,
@@ -109,37 +119,43 @@ export default {
                 {
                     key: 'four',
                     name: '4 player chess',
+                    options: [],
                     new: true,
                 },
                 {
-                    key: 'ranked',
-                    name: 'ranked',
+                    key: 'blitz',
+                    name: 'blitz',
                     options: [
                         {
-                            key: 'classical',
-                            name: 'classical'
+                            key: 'ranked',
+                            name: 'ranked'
                         },
                         {
-                            key: 'blitz',
-                            name: 'blitz'
+                            key: 'unranked',
+                            name: 'unranked'
                         },
                     ],
                 },
                 {
-                    key: 'unranked',
-                    name: 'unranked',
+                    key: 'classical',
+                    name: 'classical',
                     options: [
                         {
-                            key: 'classical',
-                            name: 'classical'
+                            key: 'ranked',
+                            name: 'ranked'
                         },
                         {
-                            key: 'blitz',
-                            name: 'blitz'
+                            key: 'unranked',
+                            name: 'unranked'
                         },
                     ],
                 },
             ]
+        }
+    },
+    created() {
+        if(process.client) {
+            this.controller = new SearchController()
         }
     },
     methods: {
@@ -150,13 +166,19 @@ export default {
             this.isOpen = false
         },
         chooseType(type) {
-            this.game.type = type
+            this.game.type = type.key
+            this.game.options = []
+            for(let i=0;i<type.options.length;++i) {
+                this.game.options.push(type.options[i].key)
+            }
+            console.log(this.game.options)
         },
         findMatch() {
             if (!this.isOpen) {
                 this.openMenu()
                 return
             }
+            this.controller.search(this.game)
         }
     }
 }

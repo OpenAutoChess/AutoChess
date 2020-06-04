@@ -27,6 +27,7 @@ module.exports = {
 
     plugins: [
         { src: '~/plugins/helpers.js' },
+        { src: '~/plugins/auth.js' },
     ],
 
     build: {
