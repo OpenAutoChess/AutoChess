@@ -65,8 +65,12 @@ export default {
             signup: 'auth/signup'
         }),
         async sendSignup() {
-            this.signup({...this.user})
-            // this.close()
+            try {
+                let resp = await this.signup({...this.user})
+                this.signin()
+            } catch(e) {
+                
+            }
         },
         close() {
             this.$closeModal('signup')

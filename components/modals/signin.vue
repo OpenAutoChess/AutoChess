@@ -53,8 +53,12 @@ export default {
             login: 'auth/signin'
         }),
         async sendLogin() {
-            this.login({...this.user})
-            // this.close()
+            try {
+                let resp = await this.login({...this.user})
+                this.close()
+            } catch(e) {
+                
+            }
         },
         close() {
             this.$closeModal('signin')
