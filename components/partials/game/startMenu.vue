@@ -1,16 +1,20 @@
 <template>
     <div v-click-outside="closeMenu" :class="['start-wrapper', {'--active': isOpen}]">
         <div class="types-wrapper">
-            <div :class="['type', {'--active': game.type == type.key}]" v-for="type in types" :key="type.key">
-                <button @click="chooseType(type)"><span>{{ type.name }}</span></button>
-                <div class="options" v-if="type.options">
-                    <div v-for="option in type.options">
+            <div :class="['type', {'--active': game.mode == mode.key}]" v-for="mode in modes" :key="mode.key">
+                <button @click="choosemode(mode)"><span>{{ mode.name }}</span></button>
+                <div class="options" v-if="mode.options">
+                    <div v-for="option in mode.options">
                         <label>
-                            <input type="checkbox" :name="type.key" :value="option.key" v-model="game.options" :disabled="type.disabled" />
+                            <input type="checkbox" :name="mode.key" :value="option.key" v-model="game.options" :disabled="mode.disabled" />
                             {{ option.name }}
                         </label>
                     </div>
                 </div>
+            </div>
+            <div>
+                Online: {{ controller.online }}
+                Searching: {{ controller.searching }}
             </div>
         </div>
 
@@ -24,7 +28,8 @@
                     <polyline points="299,1 299,59 1,59 1,1 299,1" class="bg-line" />
                     <polyline points="299,1 299,59 1,59 1,1 299,1" class="hl-line" />
                 </svg>
-                <span v-if="isOpen">FIND MATCH</span>
+                <span v-if="controller.isSearching">FINDING MATCH...</span>
+                <span v-else-if="isOpen">FIND MATCH</span>
                 <span v-else>PLAY CHESS</span>
             </button>
         </div>
@@ -34,6 +39,7 @@
 <script>
 import ClickOutside from 'vue-click-outside'
 import SearchController from '@/chess/controllers/SearchController'
+import { mapGetters } from 'vuex'
 
 export default {
     directives: {
@@ -44,10 +50,10 @@ export default {
             controller: null,
             isOpen: false,
             game: {
-                type: 'classical',
+                mode: 'classical',
                 options: ['ranked', 'unranked'],
             },
-            types: [
+            modes: [
                 {
                     key: 'puzzles',
                     name: 'puzzles',
@@ -153,6 +159,11 @@ export default {
             ]
         }
     },
+    computed: {
+        ...mapGetters({
+            authToken: 'auth/GET_TOKEN'
+        })
+    },
     created() {
         if(process.client) {
             this.controller = new SearchController()
@@ -165,15 +176,19 @@ export default {
         closeMenu() {
             this.isOpen = false
         },
-        chooseType(type) {
-            this.game.type = type.key
+        choosemode(mode) {
+            this.game.mode = mode.key
             this.game.options = []
-            for(let i=0;i<type.options.length;++i) {
-                this.game.options.push(type.options[i].key)
+            for(let i=0;i<mode.options.length;++i) {
+                this.game.options.push(mode.options[i].key)
             }
             console.log(this.game.options)
         },
         findMatch() {
+            if (this.controller.isSearching) {
+                this.controller.stopSearch()
+                return
+            }
             if (!this.isOpen) {
                 this.openMenu()
                 return

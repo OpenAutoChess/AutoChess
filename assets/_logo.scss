@@ -1,0 +1,29 @@
+.logo {
+    width: 100px;
+    color: white;
+    text-decoration: none;
+
+    &.--black {
+        color: black;
+    }
+
+
+    img {
+        width: 100px;
+        margin-bottom: -5px;
+    }
+
+    div {
+        font-size: 12px;
+        text-align: center;
+        line-height: 10px;
+        font-weight: 600;
+        letter-spacing: .5px;
+    }
+
+    div:first-of-type {
+        padding-left: 4px;
+        letter-spacing: 3.5px;
+    }
+
+}

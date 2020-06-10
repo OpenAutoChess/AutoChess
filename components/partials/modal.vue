@@ -1,28 +1,24 @@
 <template>
     <div>
-        <transition name="modal-fade">
-            <div class="modal-wrapper" v-if="$isOpen('auth')">
-                <Auth />
+        <transition-group name="modal-fade">
+            <div class="modal-wrapper" v-if="$isOpen('signin')" key="signin-modal">
+                <signin />
             </div>
-        </transition>
+            <div class="modal-wrapper" v-if="$isOpen('signup')" key="signup-modal">
+                <signup />
+            </div>
+        </transition-group>
     </div>
 </template>
 
 <script>
-import Auth from '@/components/modals/auth'
+import Signup from '@/components/modals/signup'
+import Signin from '@/components/modals/signin'
 
 export default {
     components: {
-        Auth
+        Signup, Signin
     },
-    mounted() {
-        // setTimeout(() => {
-        //     this.$showModal('auth')
-        //     setTimeout(() => {
-        //         // this.$closeModal('auth')
-        //     }, 3000)
-        // }, 3000)
-    }
 }
 
 </script>

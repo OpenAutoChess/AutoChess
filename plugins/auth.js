@@ -1,7 +1,7 @@
 export default function({ $axios, store }, inject) {
 
     $axios.onRequest(config => {
-        if (store.state.auth.isSignedIn) {
+        if (store.state.auth.token) {
             config.headers.common['Authorization'] = store.getters['auth/GET_TOKEN']
         }
     })

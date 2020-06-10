@@ -1,15 +1,28 @@
 <template>
     <div>
-        <start-menu />
+        <button @click="test">qwe</button>
+
     </div>
 </template>
 
 <script>
-import StartMenu from '@/components/partials/game/startMenu'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     components: {
-        StartMenu
+        //
+    },
+    mounted() {
+    },
+    methods: {
+        ...mapActions({
+            signin: 'auth/signin',
+            signup: 'auth/signup',
+            fetchUser: 'profile/fetchUser',
+        }),
+        async test() {
+            this.$showModal('signin')
+        }
     }
 }
 </script>

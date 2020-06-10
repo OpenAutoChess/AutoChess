@@ -1,15 +1,19 @@
-export default function({ $axios }, inject) {
+export default function({  }, inject) {
 
     inject('api', {
-        async get(url, data = {}) {
-            try {
-                const resp = await $axios.$get(url, { query: data })
-                return resp
-            } catch (err) {
-                console.log(err)
-                return null
+        auth: {
+            baseUrl: 'http://auth.autochess.kz',
+            prefix: '/api/users',
+            urls: {
+                signup: '/register/',
+                signin: '/auth/',
+                user: '/profile/',
+                resend: '/send-message/',
+            },
+            url(key) {
+                return this.baseUrl + this.prefix + this.urls[key]
             }
-        },
+        }
     })
 
 }

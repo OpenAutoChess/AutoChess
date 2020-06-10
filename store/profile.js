@@ -15,7 +15,7 @@ export const mutations = {
 export const actions = {
     async fetchUser(store, payload) {
         try {
-            // FETCH USER
+            store.commit('SET_USER', await this.$axios.$get(this.$api.auth.url('user'), payload))
         } catch(e) {
             store.dispatch('auth/logout', null, { root: true })
         }

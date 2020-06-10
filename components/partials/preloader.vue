@@ -16,9 +16,9 @@ export default {
     },
     mounted() {
         if (process.client) {
-            setTimeout(() => {
+            // setTimeout(() => {
                 this.$stopLoading()
-            }, 1000 + Math.random() * 2000)
+            // }, 1000 + Math.random() * 2000)
         }
     }
 }

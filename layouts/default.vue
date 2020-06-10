@@ -9,6 +9,7 @@
 
         <client-only>
             <modal />
+            <start-menu />
         </client-only>
 
     </div>
@@ -17,10 +18,11 @@
 <script>
 import Preloader from "@/components/partials/preloader.vue"
 import Modal from "@/components/partials/modal.vue"
+import StartMenu from '@/components/partials/game/startMenu'
 
 export default {
     components: {
-        Preloader, Modal
+        Preloader, Modal, StartMenu
     },
 }
 </script>

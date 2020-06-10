@@ -27,21 +27,16 @@ export const actions = {
     },
 
     async signin(store, payload) {
-        // TODO: GET TOKEN
+        let resp = await this.$axios.$post(this.$api.auth.url('signin'), payload)
+
+        let token = resp.token
         store.commit('SET_TOKEN', token)
         await store.dispatch('profile/fetchUser', null, { root: true })
     },
 
     async signup(store, payload) {
-        // TODO: SIGNUP
-    },
-
-    async verify(store, payload) {
-        //
-    },
-
-    async resetVerification(store, payload) {
-        //
+        let resp = await this.$axios.$post(this.$api.auth.url('signup'), payload)
+        this.$axios.$post(this.$api.auth.url('resend'), { email: payload.email })
     },
 
     async logout(store, payload) {
