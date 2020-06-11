@@ -99,21 +99,28 @@
                 </div>
             </transition-group>
         </div>
+        <board ></board>
     </div>
 </template>
 
 <script>
 import ClickOutside from 'vue-click-outside'
 import SearchController from '@/chess/controllers/SearchController'
+import GameController from '@/chess/controllers/GameController'
+import Board from '@/components/chess/board'
 import { mapGetters } from 'vuex'
 
 export default {
+    components: {
+        Board
+    },
     directives: {
         ClickOutside
     },
     data() {
         return {
             controller: null,
+            gameController: null,
             isOpen: false,
             game: {
                 mode: 'classical',
@@ -268,7 +275,8 @@ export default {
     },
     created() {
         if(process.client) {
-            this.controller = new SearchController()
+            this.gameController = new GameController()
+            this.controller = new SearchController(this.gameController)
         }
     },
     methods: {

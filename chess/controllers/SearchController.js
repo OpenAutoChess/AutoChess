@@ -2,9 +2,12 @@ import Controller from './Controller'
 
 export default class SearchController extends Controller {
 
+    gameController = null
+
     connection = null
     url = 'http://localhost:8000'
     isSearching = false
+    options = null
 
     searching = 0
     online = 0
@@ -17,8 +20,9 @@ export default class SearchController extends Controller {
     found = false
     ready = false
 
-    constructor() {
+    constructor(gameController = null) {
         super()
+        this.gameController = gameController
         this.connection = this.connect(this.url, { query: { mode: 'online' } })
 
         this.connection.on('searching-cnt', (data) => {
@@ -65,6 +69,7 @@ export default class SearchController extends Controller {
         this.connection.on('starting', (data) => {
             console.log('STARTING')
             this.stopSearch()
+            this.gameController.start(data, this.options)
             setTimeout(() => {
                 this.found = false
             }, 1000)
@@ -73,6 +78,7 @@ export default class SearchController extends Controller {
     }
 
     search(options) {
+        this.options = options
         this.isSearching = true
         this.connection.emit('search', options)
 
