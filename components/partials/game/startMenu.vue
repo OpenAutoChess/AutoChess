@@ -2,7 +2,7 @@
     <div v-click-outside="closeMenu" :class="['start-wrapper', {'--active': isOpen}]">
         <div class="types-wrapper">
             <div :class="['type', {'--active': game.mode == mode.key, '--new': mode.new}]" v-for="mode in modes" :key="mode.key">
-                <button @click="choosemode(mode)"><span>{{ mode.name }}</span></button>
+                <button @click="choosemode(mode)" :class="{'--disabled': mode.disabled}" :disabled="mode.disabled"><span>{{ mode.name }}</span></button>
                 <div class="options">
                     <div class="ranked" v-if="mode.ranked">
                         <label>
@@ -43,16 +43,29 @@
             <span></span>
         </button>
 
-        <div class="stop-wrapper" v-if="controller.isSearching">
+        <div class="stop-wrapper" v-if="controller.isSearching && !controller.found">
             <div class="info">
-                {{ modeName(game.mode) }}, <span class="timer">{{ formatTimer(controller.timer) }}</span>
+                <span v-if="getMode(game.mode)">{{ getMode(game.mode).name }}, </span>
+                <span v-if="getMode(game.mode) && getMode(game.mode).ranked">{{ game.ranked ? 'ranked' : 'unranked' }}, </span>
+                <span class="timer">{{ formatTimer(controller.timer) }}</span>
             </div>
             <div class="stop">
-                <div>FINDING MATCH...</div>
+
+                <div>
+                    <div class="online-info">
+                        <div class="online-popover">
+                            <div>Online: {{ controller.online }}</div>
+                            <div>Searching: {{ controller.searching }}</div>
+                            <div>Estimated wait time: {{ formatTimer(controller.waitTime) }}</div>
+                        </div>
+                        &#9432;
+                    </div>
+                    FINDING MATCH...
+                </div>
                 <button @click="stopSearch">&#10005;</button>
             </div>
         </div>
-        <div class="search-wrapper" v-else>
+        <div class="search-wrapper" v-else-if="!controller.found">
             <button class="search" @click="findMatch">
                 <svg width="300px" height="60px" viewBox="0 0 300 60" class="border">
                     <polyline points="299,1 299,59 1,59 1,1 299,1" class="bg-line" />
@@ -61,6 +74,30 @@
                 <span v-if="isOpen">FIND MATCH</span>
                 <span v-else>PLAY CHESS</span>
             </button>
+        </div>
+        <div class="game-ready" v-if="controller.found && controller.clients">
+            <transition-group name="fade">
+                <div class="accept-wrapper" v-if="!controller.accepted" key="accept-modal">
+                    <div class="head-wrapper">
+                        <div class="head">Your game is ready</div>
+                        <div class="title">{{ getMode(game.mode).name }}</div>
+                    </div>
+                    <div class="body">
+                        <div class="accept">
+                            <button @click="controller.acceptGame()">Accept</button>
+                        </div>
+                        <div class="cancel">
+                            <button @click="controller.declineGame()">Decline Match</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="clients-wrapper" v-else key="clients-modal">
+                    <div class="client" v-for="client in Object.keys(controller.clients)">
+                        <img :class="{'--accepted': controller.clients[client].accepted, '--canceled': controller.clients[client].canceled}" :src="controller.clients[client].Avatar" :alt="controller.clients[client].UserName" />
+                        <span>{{ controller.clients[client].UserName }}</span>
+                    </div>
+                </div>
+            </transition-group>
         </div>
     </div>
 </template>
@@ -243,10 +280,10 @@ export default {
             }
             return date.toISOString().substr(14, 5);
         },
-        modeName: function(key) {
+        getMode: function(key) {
             for(let i = 0;i<this.modes.length;++i) {
                 if (this.modes[i].key == key) {
-                    return this.modes[i].name
+                    return this.modes[i]
                 }
             }
             return null
@@ -268,14 +305,18 @@ export default {
             this.game.options = []
             this.game.durations = []
 
-            if (mode.options) {                
+            if (mode.options) {
                 for(let i=0;i<mode.options.length;++i) {
-                    this.game.options.push(mode.options[i].key)
+                    if (!mode.options[i].disabled) {
+                        this.game.options.push(mode.options[i].key)
+                    }
                 }
             }
             if (mode.durations) {
                 for(let i=0;i<mode.durations.length;++i) {
-                    this.game.durations.push(mode.durations[i].key)
+                    if (!mode.durations[i].disabled) {
+                        this.game.durations.push(mode.durations[i].key)
+                    }
                 }
             }
         },

@@ -87,6 +87,11 @@
                     font-weight: 600;
                     text-transform: uppercase;
                 }
+
+                &.--disabled {
+                    background-color: #505d69;
+                    cursor: auto;
+                }
             }
 
             .options {
@@ -172,7 +177,7 @@
             position: absolute;
             right: 0px;
             bottom: 20px;
-            width: 320px;
+            width: 360px;
             height: 60px;
             padding-right: 60px;
             display: flex;
@@ -193,6 +198,39 @@
                 font-weight: 600;
                 box-shadow: inset 0px 0px 5px 1px black;
                 border-color: black;
+                transition: .2s ease-in-out;
+
+                &:hover {
+                    box-shadow: inset 0px 0px 10px 1px black;
+                }
+            }
+
+            .online-info {
+                display: inline-block;
+                cursor: pointer;
+                padding-right: 10px;
+
+                &:hover {
+                    .online-popover {
+                        display: block;
+                    }
+                }
+
+                .online-popover {
+                    background-color: #26394c;
+                    box-shadow: 0 0 10px 1px rgba(0, 0, 0, .2);
+                    position: absolute;
+                    padding: 10px 15px;
+                    bottom: 50px;
+                    right: 340px;
+                    border-radius: 10px 10px 0 10px;
+                    width: 200px;
+                    height: 85px;
+                    display: none;
+                    font-weight: 400;
+                    font-size: 14px;
+                }
+
             }
 
         }
