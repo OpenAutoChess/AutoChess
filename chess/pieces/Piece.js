@@ -1,14 +1,11 @@
 export default class Piece {
-    row = null
-    col = null
 
-    constructor(row, col) {
-        this.row = row
-        this.col = col
+    constructor(color) {
+        this.color = color
     }
 
     getImage() {
-        return this.player.color + this.constructor.name
+        return this.color + this.constructor.name
     }
 
 }

@@ -2,8 +2,8 @@ import Piece from './Piece'
 
 export default class Pawn extends Piece {
 
-    constructor(row, col) {
-        super(row, col)
+    constructor(color) {
+        super(color)
 
     }
 
