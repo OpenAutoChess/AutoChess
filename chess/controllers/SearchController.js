@@ -15,7 +15,7 @@ export default class SearchController extends Controller {
 
     clients = null
     found = false
-    accepted = false
+    ready = false
 
     constructor() {
         super()
@@ -38,35 +38,41 @@ export default class SearchController extends Controller {
             for(let key in data) {
                 data[key] = Object.assign({ accepted: false, canceled: false }, data[key])
             }
+            this.isSearching = false
+            this.ready = false
             this.found = true
-            this.accepted = false
             this.clients = data
-            console.log("Found event: ", data)
         })
 
         this.connection.on('accepted', (data) => {
             this.clients[data].accepted = true
-            console.log("Accepted event: ", data)
         })
 
         this.connection.on('canceled', (data) => {
+            console.log('CANCELED')
+            this.ready = true
             this.clients[data].canceled = true
-            this.accepted = true
-            console.log("Canceled event: ", data)
         })
 
         this.connection.on('canceling', (data) => {
-            console.log("Canceling event: ", data)
+            console.log('CANCELING')
+            this.stopSearch()
+            setTimeout(() => {
+                this.found = false
+            }, 2000)
         })
 
         this.connection.on('starting', (data) => {
-            console.log("Starting event: ", data)
+            console.log('STARTING')
+            this.stopSearch()
+            setTimeout(() => {
+                this.found = false
+            }, 1000)
         })
 
     }
 
     search(options) {
-        this.found = false
         this.isSearching = true
         this.connection.emit('search', options)
 
@@ -79,22 +85,28 @@ export default class SearchController extends Controller {
     }
 
     stopSearch() {
-        this.isSearching = false
-        this.connection.emit('stop')
+        if (this.isSearching) {
+            this.connection.emit('stop')
+        }
 
+        this.isSearching = false
         clearInterval(this.interval)
         this.interval = null
         this.timer = 0
     }
 
     acceptGame() {
-        this.accepted = true
+        this.ready = true
         this.connection.emit('accept')
     }
 
     declineGame() {
-        this.accepted = true
         this.connection.emit('cancel')
+        this.stopSearch()
+        this.ready = true
+        setTimeout(() => {
+            this.found = false
+        }, 1000)
     }
 
 }

@@ -77,10 +77,10 @@
         </div>
         <div class="game-ready" v-if="controller.found && controller.clients">
             <transition-group name="fade">
-                <div class="accept-wrapper" v-if="!controller.accepted" key="accept-modal">
+                <div class="accept-wrapper" v-if="!controller.ready" key="accept-modal">
                     <div class="head-wrapper">
                         <div class="head">Your game is ready</div>
-                        <div class="title">{{ getMode(game.mode).name }}</div>
+                        <div class="title">{{ getMode(game.mode).name }} {{  getMode(game.mode).ranked && game.ranked ? "RANKED" : "" }}</div>
                     </div>
                     <div class="body">
                         <div class="accept">
