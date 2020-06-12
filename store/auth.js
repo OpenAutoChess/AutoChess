@@ -32,6 +32,9 @@ export const actions = {
         let token = resp.token
         store.commit('SET_TOKEN', token)
         await store.dispatch('profile/fetchUser', null, { root: true })
+        if (process.client) {
+            window.location.reload(true)
+        }        
     },
 
     async signup(store, payload) {
