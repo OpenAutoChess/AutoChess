@@ -4,7 +4,7 @@ export default class SearchController extends Controller {
 
     gameController = null
     connection = null
-    url = 'http://localhost:8000'
+    url = process.env.NODE_ENV == 'development' ? 'http://localhost:8000' : 'http://search.autochess.kz'
 
     isSearching = false
 

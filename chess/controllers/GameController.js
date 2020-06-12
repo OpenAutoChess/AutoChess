@@ -3,7 +3,7 @@ import * as Pieces from '../pieces/Pieces'
 
 export default class GameController extends Controller {
 
-    url = "http://localhost:3002/"
+    url = process.env.NODE_ENV == 'development' ? "http://localhost:3002/" : 'http://server001.autochess.kz'
     connection = null
 
     pieces = {}
