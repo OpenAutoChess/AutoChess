@@ -273,7 +273,7 @@ export default {
         }),
     },
     created() {
-        if(process.client) {
+        if(process.client && this.$isSignedIn()) {
             const gameController =  new GameController(this.$user().id)
             this.controller = new SearchController(gameController)
         }

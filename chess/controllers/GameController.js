@@ -38,7 +38,7 @@ export default class GameController extends Controller {
 
         this.room = room
         this.options = options
-        this.mode = "Four"//room.split('_')[0].charAt(0).toUpperCase() + room.split('_')[0].slice(1)
+        this.mode = room.split('_')[0].charAt(0).toUpperCase() + room.split('_')[0].slice(1)
         this.component = () => import(`@/components/chess/boards/${(this.mode)}`)
 
         this.connection = this.connect(this.url, { query: {} })
