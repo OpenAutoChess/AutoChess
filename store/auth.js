@@ -12,7 +12,7 @@ export const mutations = {
     SET_TOKEN: (state, token) => {
         state.token = token
         if (token) {
-            Cookies.set('AuthToken', token, { expires: 3 })
+            Cookies.set('AuthToken', token, { expires: 3, domain: '.autochess.kz'})
         } else {
             Cookies.remove('AuthToken')
         }
@@ -34,7 +34,7 @@ export const actions = {
         await store.dispatch('profile/fetchUser', null, { root: true })
         if (process.client) {
             window.location.reload(true)
-        }        
+        }
     },
 
     async signup(store, payload) {
