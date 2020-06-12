@@ -99,7 +99,7 @@
                 </div>
             </transition-group>
         </div>
-        <board ></board>
+        <board :controller="controller.gameController" v-if="controller.gameController.visible"></board>
     </div>
 </template>
 
@@ -107,7 +107,7 @@
 import ClickOutside from 'vue-click-outside'
 import SearchController from '@/chess/controllers/SearchController'
 import GameController from '@/chess/controllers/GameController'
-import Board from '@/components/chess/board'
+import Board from '@/components/chess/Board'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -120,7 +120,6 @@ export default {
     data() {
         return {
             controller: null,
-            gameController: null,
             isOpen: false,
             game: {
                 mode: 'classical',
@@ -275,8 +274,8 @@ export default {
     },
     created() {
         if(process.client) {
-            this.gameController = new GameController()
-            this.controller = new SearchController(this.gameController)
+            const gameController =  new GameController(this.$user().id)
+            this.controller = new SearchController(gameController)
         }
     },
     methods: {

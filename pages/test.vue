@@ -1,7 +1,6 @@
 <template>
     <div>
-        <button @click="test">qwe</button>
-
+        
     </div>
 </template>
 

@@ -1,16 +1,23 @@
 @import 'classical';
 @import 'fourplayer';
 
-.board {
-    background-color: #1e272f;
-    border: 2px solid black;
-    margin: auto;
-    border-collapse: collapse;
+.board-wrapper {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
 
-    &.-classical {
-        @include classical-board;
-    }
-    &.-fourplayer {
-        @include fourplayer-board;
+    .board {
+        margin: auto;
+        border-collapse: collapse;
+
+        &.-classical {
+            @include classical-board;
+        }
+        &.-four {
+            @include fourplayer-board;
+        }
     }
 }

@@ -8,12 +8,18 @@ export default class GameController extends Controller {
 
     pieces = {}
     component = null
+    activeCell = { row: null, col: null }
+    currentUserId = null
+    currentUserIndex = null
 
     mode = "Classical"
     room = null
 
-    constructor() {
+    visible = false
+
+    constructor(currentUserId) {
         super()
+        this.currentUserId = currentUserId
     }
 
     getPiece(i, j) {
@@ -24,15 +30,15 @@ export default class GameController extends Controller {
         }
     }
 
-    move() {
-
+    move(move) {
+        this.connection.emit('move', move)
     }
 
-    start(room, options) {
+    start(room, options = {}) {
 
         this.room = room
         this.options = options
-        this.mode = room.split('_')[0].charAt(0).toUpperCase() + room.split('_')[0].slice(1)
+        this.mode = "Four"//room.split('_')[0].charAt(0).toUpperCase() + room.split('_')[0].slice(1)
         this.component = () => import(`@/components/chess/boards/${(this.mode)}`)
 
         this.connection = this.connect(this.url, { query: {} })
@@ -43,6 +49,16 @@ export default class GameController extends Controller {
 
     setHandlers() {
         this.connection.on('game-start', (data) => {
+            this.visible = true
+            this.nextMove = data.NextMove
+            this.pieces = data.Pieces
+            this.users = data.Users
+            for(let i=0;i<this.users.length;++i) {
+                if (this.users[i] == this.currentUserId) {
+                    this.currentUserIndex = i
+                    break;
+                }
+            }
             console.log("START", data)
         })
 
@@ -51,13 +67,44 @@ export default class GameController extends Controller {
         })
 
         this.connection.on('game-move', (data) => {
-            console.log("MOVE", data)
+            this.pieces = JSON.parse(data)
+            console.log("MOVE", this.pieces)
         })
 
         this.connection.on('test', (data) => {
             console.log("TEST", data)
         })
 
+    }
+
+    setActiveCell(i, j) {
+        if (this.isMove(i, j)) {
+            console.log("MOVE")
+            this.move({
+                from: this.activeCell,
+                to: { row: i, col: j }
+            })
+        }
+        this.activeCell = {
+            row: i,
+            col: j
+        }
+    }
+
+    isActiveCell(i, j) {
+        return this.activeCell.row == i && this.activeCell.col == j
+    }
+
+    isMove(i, j) {
+        if (this.isActiveCell(i, j)) {
+            return false
+        }
+        try {
+            let activePiece = this.pieces[this.activeCell.row][this.activeCell.col]
+            return (activePiece && activePiece.Color == this.currentUserIndex + 1)
+        } catch (e) {
+            return false
+        }
     }
 
 }

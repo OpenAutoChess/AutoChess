@@ -1,7 +1,7 @@
 <template>
     <section class="container">
         <client-only>
-
+            
         </client-only>
     </section>
 </template>

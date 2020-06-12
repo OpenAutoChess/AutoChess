@@ -2,6 +2,7 @@ import Controller from './Controller'
 
 export default class SearchController extends Controller {
 
+    gameController = null
     connection = null
     url = 'http://localhost:8000'
 
@@ -18,8 +19,10 @@ export default class SearchController extends Controller {
     found = false
     ready = false
 
-    constructor() {
+    constructor(gameController) {
         super()
+        this.gameController = gameController
+        this.startConnection()
     }
 
     search(options) {
@@ -110,7 +113,7 @@ export default class SearchController extends Controller {
         this.connection.on('starting', (data) => {
             console.log('STARTING')
             this.stopSearch()
-
+            this.gameController.start(data)
             setTimeout(() => {
                 this.found = false
             }, 1000)
