@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <div class="indicators">
+            <div class="indicators" v-if="controller">
                 <div>
                     Online: {{ controller.online }}
                 </div>
@@ -43,7 +43,7 @@
             <span></span>
         </button>
 
-        <div class="stop-wrapper" v-if="controller.isSearching && !controller.found">
+        <div class="stop-wrapper" v-if="controller && controller.isSearching && !controller.found">
             <div class="info">
                 <span v-if="getMode(game.mode)">{{ getMode(game.mode).name }}, </span>
                 <span v-if="getMode(game.mode) && getMode(game.mode).ranked">{{ game.ranked ? 'ranked' : 'unranked' }}, </span>
@@ -65,7 +65,7 @@
                 <button @click="stopSearch">&#10005;</button>
             </div>
         </div>
-        <div class="search-wrapper" v-else-if="!controller.found">
+        <div class="search-wrapper" v-else-if="!controller || !controller.found">
             <button class="search" @click="findMatch">
                 <svg width="300px" height="60px" viewBox="0 0 300 60" class="border">
                     <polyline points="299,1 299,59 1,59 1,1 299,1" class="bg-line" />
@@ -75,7 +75,7 @@
                 <span v-else>PLAY CHESS</span>
             </button>
         </div>
-        <div class="game-ready" v-if="controller.found && controller.clients">
+        <div class="game-ready" v-if="controller && controller.found && controller.clients">
             <transition-group name="fade">
                 <div class="accept-wrapper" v-if="!controller.ready" key="accept-modal">
                     <div class="head-wrapper">
@@ -99,7 +99,7 @@
                 </div>
             </transition-group>
         </div>
-        <board :controller="controller.gameController" v-if="controller.gameController.visible"></board>
+        <board :controller="controller.gameController" v-if="controller && controller.gameController.visible"></board>
     </div>
 </template>
 
